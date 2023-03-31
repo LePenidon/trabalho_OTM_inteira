@@ -17,5 +17,5 @@ setRestricoes(modelo, dados)
 
 modelo.m.optimize()
 
-printSolucaoValores(modelo, instancia)
+# printSolucaoValores(modelo, instancia)
 printSolucao(modelo, dados)

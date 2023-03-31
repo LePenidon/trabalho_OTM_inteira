@@ -33,6 +33,11 @@ def setRestricoes(modelo, dados):
 def printSolucaoValores(modelo, instancia):
     print("\n\nInstância: " + str(instancia))
 
+    if (modelo.m.status == 3):
+        print("Solução Infactível")
+    else:
+        print("Existe solução")
+
     try:
         print("\nValor da solução ótima: " + str(round(modelo.m.objVal)))
     except:
