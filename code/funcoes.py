@@ -14,33 +14,63 @@ def setParametrosGurobi(modelo, minutos):
 
 
 def setVariaveis(modelo, dados):
-    modelo.s = modelo.m.addVars(
-        dados.N, vtype=GRB.CONTINUOUS, lb=0, name="Secoes")
+    modelo.x = modelo.m.addVars(
+        dados.n, vtype=GRB.BINARY, name="Cobrir")
 
 
 def setFuncaoObjetivo(modelo, dados):
-    modelo.m.setObjective(sum(modelo.s[i]
-                          for i in range(dados.N)), GRB.MAXIMIZE)
+    modelo.m.setObjective(sum(dados.c[i]*modelo.x[i]
+                          for i in range(dados.n)), GRB.MINIMIZE)
 
 
 def setRestricoes(modelo, dados):
-    modelo.m.addConstr(sum(modelo.s[i]*dados.a[i]
-                       for i in range(dados.N)) <= dados.e)
 
-    modelo.m.addConstr(
-        sum(modelo.s[i]*dados.S for i in range(dados.N)) <= dados.d)
-
-    modelo.m.addConstr(sum(modelo.s[i]*dados.b[i]
-                       for i in range(dados.N)) <= dados.c)
+    for i in range(dados.m):
+        modelo.m.addConstr(sum(dados.a[i, j]*modelo.x[j]
+                               for j in range(dados.n)) >= 1)
 
 
-def printSolucao(modelo, dados, instancia):
-    print("\n\t\tInstância:", instancia)
-    print("\n")
-    print("Valor da solução ótima:\t" + str(modelo.m.ObjVal))
+def printSolucaoValores(modelo, instancia):
+    print("\n\nInstância: " + str(instancia))
 
-    for i in range(dados.N):
-        if (i == 0):
-            print("\n Seçoes de Natacao: " + str(modelo.s[i].x))
-        elif (i == 1):
-            print("Secoes de Ciclismo: " + str(modelo.s[i].x))
+    try:
+        print("\nValor da solução ótima: " + str(round(modelo.m.objVal)))
+    except:
+        print("\nValor da solução ótima: - ")
+
+    try:
+        print("Lower Bound: " + str(round(modelo.m.objBound)))
+    except:
+        print("Lower Bound: - ")
+
+    try:
+        print("Nodes: " + str(round(modelo.m.NodeCount)))
+    except:
+        print("Nodes: - ")
+
+    try:
+        print("Tempo: " + str(round(modelo.m.Runtime)) + " segundos" +
+              " = " + str(round(modelo.m.Runtime)/60) + " minutos\n")
+    except:
+        print("Tempo: - \n")
+
+    return
+
+
+def printSolucao(modelo, dados):
+    output = ""
+
+    try:
+        solfile = io.open("solucao.txt", "w+")
+
+        for j in range(dados.n):
+            output += str(modelo.x[j].X)
+            output += " "
+
+        solfile.write(output)
+        print(output)
+
+    except:
+        print("\nErro ao imprimir solucao")
+
+    return

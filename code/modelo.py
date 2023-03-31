@@ -3,6 +3,6 @@ import gurobipy as gp
 
 class Modelo():
 
-    m = gp.Model("Esportes")
+    m = gp.Model("Teste")
 
-    s = 0
+    x = 0
