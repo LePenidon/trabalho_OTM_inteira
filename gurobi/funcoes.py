@@ -5,7 +5,7 @@ from funcoes import *
 from gurobipy import GRB
 
 
-def setParametrosGurobi(modelo, minutos):
+def setParametros(modelo, minutos):
     modelo.m.setParam("TimeLimit", minutos*60)
     modelo.m.setParam('OutputFlag', 0)
 
@@ -19,8 +19,8 @@ def setVariaveis(modelo, dados):
 
 
 def setFuncaoObjetivo(modelo, dados):
-    modelo.m.setObjective(sum(dados.c[i]*modelo.x[i]
-                          for i in range(dados.n)), GRB.MINIMIZE)
+    modelo.m.setObjective(sum(dados.c[j]*modelo.x[j]
+                          for j in range(dados.n)), GRB.MINIMIZE)
 
 
 def setRestricoes(modelo, dados):

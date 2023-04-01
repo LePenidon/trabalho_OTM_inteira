@@ -10,7 +10,7 @@ minutos_totais = 60
 modelo = Modelo()
 dados = Dados(instancia)
 
-setParametrosGurobi(modelo, minutos_totais)
+setParametros(modelo, minutos_totais)
 setVariaveis(modelo, dados)
 setFuncaoObjetivo(modelo, dados)
 setRestricoes(modelo, dados)
