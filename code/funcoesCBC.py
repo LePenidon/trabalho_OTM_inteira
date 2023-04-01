@@ -9,14 +9,9 @@ import time
 
 
 def setParametrosCBC(tempo):
-    # Definição de parâmetros de solver
-    solver_parameters = {
-        "msg": False,    # exibe mensagens de progresso
-        "maxSeconds": tempo*60,
-    }
 
-    # Definição do solver
-    solver = PULP_CBC_CMD(solver_parameters)
+    # Definição do solver e parâmetros
+    solver = PULP_CBC_CMD(msg=False, timeLimit=tempo*60)
 
     return solver
 
