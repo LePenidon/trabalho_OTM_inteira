@@ -1,10 +1,12 @@
 import io
 import sys
 from pulp import *
+import time
 
 
 # =======================================================================
 #                               CBC
+
 
 def setParametrosCBC(tempo):
     # Definição de parâmetros de solver
@@ -38,7 +40,7 @@ def setRestricoesCBC(modelo, dados):
 
 
 def printSolucaoValoresCBC(modelo, status, instancia, tempo):
-    print("\n\nInstância: " + str(instancia))
+    print("\n\nCBC -> Instância: " + str(instancia))
 
     print("Status:", LpStatus[status])
 
@@ -67,8 +69,15 @@ def printSolucaoValoresCBC(modelo, status, instancia, tempo):
     return
 
 
-def printSolucaoCBC(modelo, dados):
+def printSolucaoCBC(modelo, status, dados):
     output = ""
+
+    if (LpStatus[status] == 'Infeasible'):
+        output += "Erro ao imprimir solucao"
+        print(output)
+        solfile = io.open("solucao.txt", "w+")
+        solfile.write(output)
+        return
 
     try:
         solfile = io.open("solucao.txt", "w+")
@@ -80,6 +89,26 @@ def printSolucaoCBC(modelo, dados):
         solfile.write(output)
 
     except:
+        output += "Erro ao imprimir solucao"
+        print(output)
+        solfile = io.open("solucao.txt", "w+")
+        solfile.write(output)
         print("\nErro ao imprimir solucao")
 
     return
+
+
+def resolverCBC(modelo_CBC, dados, minutos_totais, instancia):
+    solver = setParametrosCBC(minutos_totais)
+    setVariaveisCBC(modelo_CBC, dados)
+    setFuncaoObjetivoCBC(modelo_CBC, dados)
+    setRestricoesCBC(modelo_CBC, dados)
+
+    inicio_tempo = time.time()
+    status = modelo_CBC.m.solve(solver)
+    fim_tempo = time.time()
+
+    printSolucaoValoresCBC(modelo_CBC, status, instancia,
+                           inicio_tempo-fim_tempo)
+
+    printSolucaoCBC(modelo_CBC, status, dados)

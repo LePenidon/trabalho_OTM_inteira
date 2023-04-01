@@ -1,6 +1,8 @@
 import io
 import sys
 from gurobipy import GRB
+import time
+
 
 # =======================================================================
 #                               GUROBI
@@ -32,7 +34,7 @@ def setRestricoesGurobi(modelo, dados):
 
 
 def printSolucaoValoresGurobi(modelo, instancia, tempo):
-    print("\n\nInstância: " + str(instancia))
+    print("\n\nGUROBI -> Instância: " + str(instancia))
 
     if (modelo.m.status == 3):
         print("Solução Infactível")
@@ -74,9 +76,26 @@ def printSolucaoGurobi(modelo, dados):
             output += "\n"
 
         solfile.write(output)
-        print(output)
 
     except:
-        print("\nErro ao imprimir solucao")
+        output += "Erro ao imprimir solucao"
+        print(output)
+        solfile = io.open("solucao.txt", "w+")
+        solfile.write(output)
 
     return
+
+
+def resolverGurobi(modelo_GP, dados, minutos_totais, instancia):
+    setParametrosGurobi(modelo_GP, minutos_totais)
+    setVariaveisGurobi(modelo_GP, dados)
+    setFuncaoObjetivoGurobi(modelo_GP, dados)
+    setRestricoesGurobi(modelo_GP, dados)
+
+    inicio_tempo = time.time()
+    modelo_GP.m.optimize()
+    fim_tempo = time.time()
+
+    printSolucaoValoresGurobi(modelo_GP, instancia, inicio_tempo-fim_tempo)
+
+    printSolucaoGurobi(modelo_GP, dados)
