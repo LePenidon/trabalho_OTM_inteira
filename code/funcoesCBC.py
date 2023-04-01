@@ -106,6 +106,6 @@ def resolverCBC(modelo_CBC, dados, minutos_totais, instancia):
     fim_tempo = time.time()
 
     printSolucaoValoresCBC(modelo_CBC, status, instancia,
-                           inicio_tempo-fim_tempo)
+                           fim_tempo-inicio_tempo)
 
     printSolucaoCBC(modelo_CBC, status, dados)

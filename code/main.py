@@ -13,9 +13,9 @@ dados = Dados(instancia)
 # =======================================================================
 #                               GUROBI
 
-resolverGurobi(modelo_GP, dados, minutos_totais, instancia)
+# resolverGurobi(modelo_GP, dados, minutos_totais, instancia)
 
 # =======================================================================
 #                               CBC
 
-# resolverCBC(modelo_CBC, dados, minutos_totais, instancia)
+resolverCBC(modelo_CBC, dados, minutos_totais, instancia)

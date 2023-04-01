@@ -97,6 +97,6 @@ def resolverGurobi(modelo_GP, dados, minutos_totais, instancia):
     modelo_GP.m.optimize()
     fim_tempo = time.time()
 
-    printSolucaoValoresGurobi(modelo_GP, instancia, inicio_tempo-fim_tempo)
+    printSolucaoValoresGurobi(modelo_GP, instancia, fim_tempo-inicio_tempo)
 
     printSolucaoGurobi(modelo_GP, dados)
