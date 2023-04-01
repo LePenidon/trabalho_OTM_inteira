@@ -1,11 +1,12 @@
-import gurobipy as gp
 import io
 import sys
-from funcoes import *
 from gurobipy import GRB
 
+# =======================================================================
+#                               GUROBI
 
-def setParametros(modelo, minutos):
+
+def setParametrosGurobi(modelo, minutos):
     modelo.m.setParam("TimeLimit", minutos*60)
     modelo.m.setParam('OutputFlag', 0)
 
@@ -13,24 +14,24 @@ def setParametros(modelo, minutos):
     return
 
 
-def setVariaveis(modelo, dados):
+def setVariaveisGurobi(modelo, dados):
     modelo.x = modelo.m.addVars(
         dados.n, vtype=GRB.BINARY, name="Cobrir")
 
 
-def setFuncaoObjetivo(modelo, dados):
+def setFuncaoObjetivoGurobi(modelo, dados):
     modelo.m.setObjective(sum(dados.c[j]*modelo.x[j]
                           for j in range(dados.n)), GRB.MINIMIZE)
 
 
-def setRestricoes(modelo, dados):
+def setRestricoesGurobi(modelo, dados):
 
     for i in range(dados.m):
         modelo.m.addConstr(sum(dados.a[i, j]*modelo.x[j]
                                for j in range(dados.n)) >= 1)
 
 
-def printSolucaoValores(modelo, instancia):
+def printSolucaoValoresGurobi(modelo, instancia, tempo):
     print("\n\nInstância: " + str(instancia))
 
     if (modelo.m.status == 3):
@@ -54,15 +55,15 @@ def printSolucaoValores(modelo, instancia):
         print("Nodes: - ")
 
     try:
-        print("Tempo: " + str(round(modelo.m.Runtime)) + " segundos" +
-              " = " + str(round(modelo.m.Runtime)/60) + " minutos\n")
+        print("Tempo: " + str(round(tempo)) + " segundos" +
+              " = " + str(round(tempo)/60) + " minutos\n")
     except:
         print("Tempo: - \n")
 
     return
 
 
-def printSolucao(modelo, dados):
+def printSolucaoGurobi(modelo, dados):
     output = ""
 
     try:
@@ -70,7 +71,7 @@ def printSolucao(modelo, dados):
 
         for j in range(dados.n):
             output += str(modelo.x[j].X)
-            output += " "
+            output += "\n"
 
         solfile.write(output)
         print(output)
