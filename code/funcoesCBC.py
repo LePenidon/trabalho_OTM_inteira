@@ -70,6 +70,7 @@ def printSolucaoCBC(modelo, status, dados):
     if (LpStatus[status] == 'Infeasible'):
         output += "Erro ao imprimir solucao"
         print(output)
+
         solfile = io.open("solucao.txt", "w+")
         solfile.write(output)
         return
@@ -78,6 +79,7 @@ def printSolucaoCBC(modelo, status, dados):
         solfile = io.open("solucao.txt", "w+")
 
         for j in range(dados.n):
+            output += "X[" + str(j) + "]: "
             output += str(value(modelo.x[j]))
             output += "\n"
 
