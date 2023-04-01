@@ -5,7 +5,6 @@ import pulp as pu
 class ModeloGurobi():
 
     m = gp.Model("Cobertura")
-
     x = 0
 
 
