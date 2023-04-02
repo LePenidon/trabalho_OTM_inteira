@@ -72,14 +72,14 @@ def printSolucaoGurobi(modelo, dados):
         solfile = io.open("solucao.txt", "w+")
 
         for j in range(dados.n):
-            output += "X[" + str(j) + "]: "
+            output += "x[" + str(j) + "]: "
             output += str(modelo.x[j].X)
             output += "\n"
 
         solfile.write(output)
 
     except:
-        output += "Erro ao imprimir solucao"
+        output = "Erro ao imprimir solucao"
         print(output)
         solfile = io.open("solucao.txt", "w+")
         solfile.write(output)

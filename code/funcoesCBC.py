@@ -79,7 +79,7 @@ def printSolucaoCBC(modelo, status, dados):
         solfile = io.open("solucao.txt", "w+")
 
         for j in range(dados.n):
-            output += "X[" + str(j) + "]: "
+            output += "x[" + str(j) + "]: "
             output += str(value(modelo.x[j]))
             output += "\n"
 
