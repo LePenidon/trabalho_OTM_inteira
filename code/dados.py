@@ -1,4 +1,7 @@
+# importando a biblioteca utilizada
 import numpy as np
+
+# classe criada par ler os dados fornecidos pelo toy problem
 
 
 class Dados():
@@ -8,10 +11,12 @@ class Dados():
     m = 0
     n = 0
 
+    # construtor
     def __init__(self, instancia) -> None:
         self.instancia = str(instancia)
         self.arquivo += self.instancia + ".txt"
 
+        # le arquivo
         with open(self.arquivo, 'r') as f:
             leitura = [[int(num) for num in linha.split(' ')] for linha in f]
 

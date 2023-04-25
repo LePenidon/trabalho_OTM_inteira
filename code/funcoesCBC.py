@@ -1,3 +1,4 @@
+# importando as bibliotecas utilizadas
 import io
 import sys
 from pulp import *
@@ -7,13 +8,14 @@ import time
 # =======================================================================
 #                               CBC
 
-
+# Definição do solver e parâmetros
 def setParametrosCBC(tempo):
-
-    # Definição do solver e parâmetros
+    # Definição de tempo limite em minutos que o solver CBC irá executar
     solver = PULP_CBC_CMD(msg=False, timeLimit=tempo*60)
 
     return solver
+
+# Criando variáveis binárias de decisão (com tamanho entre 0 e dados.n-1)
 
 
 def setVariaveisCBC(modelo, dados):
@@ -21,19 +23,20 @@ def setVariaveisCBC(modelo, dados):
         "Cobrir", range(dados.n), 0, 1, cat='Binary')
 
 
+# Criando a função objetivo do problema de cobertura (somatório da multiplicação dos custos pelas variáveis de decisão)
 def setFuncaoObjetivoCBC(modelo, dados):
-
     modelo.m += lpSum(dados.c[j]*modelo.x[j]
                       for j in range(dados.n))
 
 
+# Definindo as restrições do modelo (somatório da multiplicação entre as variáveis de decisão e a variável a_{i,j})
 def setRestricoesCBC(modelo, dados):
-
     for i in range(dados.m):
         modelo.m += lpSum(dados.a[i, j]*modelo.x[j]
                           for j in range(dados.n)) >= 1
 
 
+# Imprimindo a solução ótima, o tempo de execução, os nós explorados e o lower bound
 def printSolucaoValoresCBC(modelo, status, instancia, tempo):
     print("\n\nCBC -> Instância: " + str(instancia))
 
@@ -64,6 +67,7 @@ def printSolucaoValoresCBC(modelo, status, instancia, tempo):
     return
 
 
+# Imprimindo a solução do problema no arquivo solucao.txt
 def printSolucaoCBC(modelo, status, dados):
     output = ""
 
@@ -71,15 +75,15 @@ def printSolucaoCBC(modelo, status, dados):
         output += "Erro ao imprimir solucao"
         print(output)
 
-        solfile = io.open("solucao.txt", "w+")
+        solfile = io.open("solucao_CBC.txt", "w+")
         solfile.write(output)
         return
 
     try:
-        solfile = io.open("solucao.txt", "w+")
+        solfile = io.open("solucao_CBC.txt", "w+")
 
         for j in range(dados.n):
-            output += "x[" + str(j) + "]: "
+            output += "x[" + str(j+1) + "]: "
             output += str(value(modelo.x[j]))
             output += "\n"
 
@@ -88,13 +92,14 @@ def printSolucaoCBC(modelo, status, dados):
     except:
         output += "Erro ao imprimir solucao"
         print(output)
-        solfile = io.open("solucao.txt", "w+")
+        solfile = io.open("solucao_CBC.txt", "w+")
         solfile.write(output)
         print("\nErro ao imprimir solucao")
 
     return
 
 
+# Função responsável por resolver o problema de otimização (utiliza a função objetivo, as restrições, as variáveis e os parâmetros criados)
 def resolverCBC(modelo_CBC, dados, minutos_totais, instancia):
     solver = setParametrosCBC(minutos_totais)
     setVariaveisCBC(modelo_CBC, dados)
