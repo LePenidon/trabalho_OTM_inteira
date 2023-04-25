@@ -1,9 +1,8 @@
 # importando a biblioteca utilizada
 import numpy as np
 
+
 # classe criada par ler os dados fornecidos pelo toy problem
-
-
 class Dados():
     arquivo = "instancias/"
     c = 0
