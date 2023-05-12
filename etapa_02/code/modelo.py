@@ -1,7 +1,7 @@
 # importando as bibliotecas utilizadas
 import gurobipy as gp
 import pulp as pu
-import pyscipopt as scip
+import scip
 
 
 # definição da classe ModeloGurobi
@@ -15,7 +15,7 @@ class ModeloGurobi():
 
 # definição da classe ModeloSCIP
 class ModeloSCIP():
-    solver = scip.Model()
+    scip_inst = scip.SCIP()
 
     # objeto do tipo pu.LpProblem (modelo matemático do problema)
     m = pu.LpProblem("Cobertura", pu.LpMinimize)
