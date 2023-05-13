@@ -1,7 +1,7 @@
 # importando as bibliotecas utilizadas
 import gurobipy as gp
 import pulp as pu
-import scip
+import pyscipopt
 
 
 # definição da classe ModeloGurobi
