@@ -1,9 +1,45 @@
-from pyscipopt import Model
+from ortools.linear_solver import pywraplp
 
-model = Model("Example")    # the name is optional
 
-x = model.addVar("x")
-y = model.addVar("y", vtype="INTEGER")
-model.setObjective(x + y)
-model.addCons(2*x - y*y >= 0)
-model.optimize()
+def main():
+    # Create the mip solver with the SCIP backend.
+    solver = pywraplp.Solver.CreateSolver('SAT')
+    if not solver:
+        return
+
+    infinity = solver.infinity()
+    # x and y are integer non-negative variables.
+    x = solver.IntVar(0.0, infinity, 'x')
+    y = solver.IntVar(0.0, infinity, 'y')
+
+    print('Number of variables =', solver.NumVariables())
+
+    # x + 7 * y <= 17.5.
+    solver.Add(x + 7 * y <= 17.5)
+
+    # x <= 3.5.
+    solver.Add(x <= 3.5)
+
+    print('Number of constraints =', solver.NumConstraints())
+
+    # Maximize x + 10 * y.
+    solver.Maximize(x + 10 * y)
+
+    print(f'Solving with {solver.SolverVersion()}')
+    status = solver.Solve()
+
+    if status == pywraplp.Solver.OPTIMAL:
+        print('Solution:')
+        print('Objective value =', solver.Objective().Value())
+        print('x =', x.solution_value())
+        print('y =', y.solution_value())
+    else:
+        print('The problem does not have an optimal solution.')
+
+    print('\nAdvanced usage:')
+    print('Problem solved in %f milliseconds' % solver.wall_time())
+    print('Problem solved in %d iterations' % solver.iterations())
+    print('Problem solved in %d branch-and-bound nodes' % solver.nodes())
+
+
+main()
