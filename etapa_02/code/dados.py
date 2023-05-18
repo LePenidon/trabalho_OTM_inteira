@@ -25,7 +25,6 @@ class Dados():
         self.n = leitura[0][1]
 
         index_linha_atual = 1
-        linha_matriz = 0
 
         merged_lines = []
         current_line = []
@@ -64,29 +63,11 @@ class Dados():
         custos = list(chain.from_iterable(custos))
         custos = list(chain.from_iterable(custos))
 
-        # valores = list(chain.from_iterable(merged_lines))
-        valores = [numero for sublista in merged_lines for numero in sublista]
+        for i in merged_lines:
+            valores_aux = [
+                numero for sublista in i for numero in sublista]
+            valores.append(valores_aux)
 
-        print(valores[0])
-        # ===============================================
-        # for i in leitura:
-        #     if (index_linha_atual == 1):
-        #         index_linha_atual += 1
-        #         continue
-
-        #     if (index_linha_atual == 2):
-        #         self.c = i
-        #         index_linha_atual += 1
-        #         continue
-
-        #     if (index_linha_atual % 2 != 0):
-
-        #         index_linha_atual += 1
-
-        #         continue
-
-        #     for j in i:
-        #         self.a[linha_matriz, j-1] = 1
-
-        #     linha_matriz += 1
-        #     index_linha_atual += 1
+        self.c = custos
+        self.a = valores
+        print(len(self.a[0]))

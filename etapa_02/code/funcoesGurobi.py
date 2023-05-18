@@ -33,7 +33,7 @@ def setFuncaoObjetivoGurobi(modelo, dados):
 def setRestricoesGurobi(modelo, dados):
 
     for i in range(dados.m):
-        modelo.m.addConstr(sum(dados.a[i, j]*modelo.x[j]
+        modelo.m.addConstr(sum(dados.a[i][j]*modelo.x[j]
                                for j in range(dados.n)) >= 1)
 
 
