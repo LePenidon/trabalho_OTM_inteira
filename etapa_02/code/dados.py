@@ -69,5 +69,11 @@ class Dados():
             valores.append(valores_aux)
 
         self.c = custos
-        self.a = valores
-        print(len(self.a[0]))
+
+        linha_matriz = 0
+
+        for i in valores:
+            for coluna in i:
+                self.a[linha_matriz][coluna-1] = custos[coluna-1]
+
+            linha_matriz += 1
