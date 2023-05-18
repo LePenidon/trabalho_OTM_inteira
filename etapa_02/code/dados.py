@@ -1,5 +1,6 @@
 # importando a biblioteca utilizada
 import numpy as np
+from itertools import chain
 
 
 # classe criada par ler os dados fornecidos pelo toy problem
@@ -26,24 +27,66 @@ class Dados():
         index_linha_atual = 1
         linha_matriz = 0
 
-        for i in leitura:
-            if (index_linha_atual == 1):
+        merged_lines = []
+        current_line = []
+
+        for line in leitura:
+            if index_linha_atual == 1:
                 index_linha_atual += 1
                 continue
 
-            if (index_linha_atual == 2):
-                self.c = i
+            if len(line) == 1 and line[0] < self.m:
+                # Adiciona a linha atual com o valor isolado
+                merged_lines.append(line+current_line)
+                current_line = []  # Reseta a linha atual
+
+            else:
+                # Acrescenta a linha atual com a linha quebrada
+                current_line.append(line)
                 index_linha_atual += 1
-                continue
 
-            if (index_linha_atual % 2 != 0):
+        custos = []
+        valores = []
 
-                index_linha_atual += 1
+        custos.append(merged_lines[0])
 
-                continue
+        colunas = []
+        colunas.append(custos[0][0])
+        merged_lines.pop(0)
+        custos[0].pop(0)
 
-            for j in i:
-                self.a[linha_matriz, j-1] = 1
+        for i in merged_lines:
+            colunas.append(i[0])
+            i.pop(0)
 
-            linha_matriz += 1
-            index_linha_atual += 1
+        colunas.pop(-1)
+
+        custos = list(chain.from_iterable(custos))
+        custos = list(chain.from_iterable(custos))
+
+        # valores = list(chain.from_iterable(merged_lines))
+        valores = [numero for sublista in merged_lines for numero in sublista]
+
+        print(valores[0])
+        # ===============================================
+        # for i in leitura:
+        #     if (index_linha_atual == 1):
+        #         index_linha_atual += 1
+        #         continue
+
+        #     if (index_linha_atual == 2):
+        #         self.c = i
+        #         index_linha_atual += 1
+        #         continue
+
+        #     if (index_linha_atual % 2 != 0):
+
+        #         index_linha_atual += 1
+
+        #         continue
+
+        #     for j in i:
+        #         self.a[linha_matriz, j-1] = 1
+
+        #     linha_matriz += 1
+        #     index_linha_atual += 1
