@@ -6,7 +6,7 @@ from dados import *
 
 # definindo qual arquivo de instancia será utilizado
 instancia = int(sys.argv[1])
-minutos_totais = 60  # definindo tempo total de execução do problema
+minutos_totais = 1  # definindo tempo total de execução do problema
 
 # criando objetos que serão utilizados nas funções resovlerGurobi e resolverCBC
 modelo_GP = ModeloGurobi()
