@@ -6,11 +6,12 @@ from dados import *
 
 # definindo qual arquivo de instancia será utilizado
 instancia = int(sys.argv[1])
-minutos_totais = 1  # definindo tempo total de execução do problema
+# definindo tempo total de execução do problema
+minutos_totais = 1
 
 # criando objetos que serão utilizados nas funções resovlerGurobi e resolverCBC
 modelo_GP = ModeloGurobi()
-# modelo_SCIP = ModeloSCIP()
+modelo_SCIP = ModeloSCIP()
 dados = Dados(instancia)
 
 # =======================================================================
@@ -19,7 +20,7 @@ dados = Dados(instancia)
 # chamando a função resolverGurobi
 # ela utiliza os objetos modelo_GP, dados, o tempo máximo de execução do problema e a instância utilizada
 
-resolverGurobi(modelo_GP, dados, minutos_totais, instancia)
+# resolverGurobi(modelo_GP, dados, minutos_totais, instancia)
 
 # =======================================================================
 #                               SCIP
@@ -27,4 +28,4 @@ resolverGurobi(modelo_GP, dados, minutos_totais, instancia)
 # chamando a função resolverSCIP
 # ela utiliza os objetos modelo_SCIP, dados, o tempo máximo de execução do problema e a instância utilizada
 
-# resolverSCIP(modelo_SCIP, dados, minutos_totais, instancia)
+resolverSCIP(modelo_SCIP, dados, minutos_totais, instancia)

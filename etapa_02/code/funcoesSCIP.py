@@ -1,60 +1,63 @@
 # importando as bibliotecas utilizadas
 import io
 import sys
-from pulp import *
 import time
-
+from ortools.linear_solver import pywraplp
+import dados
+import modelo
 
 # =======================================================================
 #                               SCIP
 
-# Definição do solver e parâmetros
-def setParametrosSCIP(tempo):
-    # Definição de tempo limite em minutos que o solver SCIP irá executar
-    solver = PULP_SCIP_CMD(msg=False, timeLimit=tempo*60)
 
-    return solver
+# Definição do solver e parâmetros
+def setParametrosSCIP(modelo, tempo):
+    # Definição de tempo limite em minutos que o solver SCIP irá executar
+    modelo.m.SetTimeLimit(tempo*60*1000)
+
+    return
+
 
 # Criando variáveis binárias de decisão (com tamanho entre 0 e dados.n-1)
-
-
-def setVariaveisSCIP(modelo, dados):
-    modelo.x = LpVariable.dicts(
-        "Cobrir", range(dados.n), 0, 1, cat='Binary')
+def setVariaveisSCIP(modelo: modelo.ModeloSCIP, dados: dados.Dados):
+    modelo.x = [modelo.m.BoolVar(f'x[{i}]') for i in range(dados.n)]
 
 
 # Criando a função objetivo do problema de cobertura (somatório da multiplicação dos custos pelas variáveis de decisão)
-def setFuncaoObjetivoSCIP(modelo, dados):
-    modelo.m += lpSum(dados.c[j]*modelo.x[j]
-                      for j in range(dados.n))
+def setFuncaoObjetivoSCIP(modelo: modelo.ModeloSCIP, dados: dados.Dados):
+    modelo.m.Minimize(sum(dados.c[j]*modelo.x[j]
+                      for j in range(dados.n)))
 
 
 # Definindo as restrições do modelo (somatório da multiplicação entre as variáveis de decisão e a variável a_{i,j})
-def setRestricoesSCIP(modelo, dados):
+def setRestricoesSCIP(modelo: modelo.ModeloSCIP, dados: dados.Dados):
     for i in range(dados.m):
-        modelo.m += lpSum(dados.a[i, j]*modelo.x[j]
-                          for j in range(dados.n)) >= 1
+        # Restrição >= 1
+        constraint = modelo.m.Constraint(
+            1, modelo.m.infinity())
+        for j in range(dados.n):
+            constraint.SetCoefficient(modelo.x[j], dados.a[i][j])
 
 
 # Imprimindo a solução ótima, o tempo de execução, os nós explorados e o lower bound
-def printSolucaoValoresSCIP(modelo, status, instancia, tempo):
+def printSolucaoValoresSCIP(modelo: modelo.ModeloSCIP, status, instancia, tempo):
     print("\n\nSCIP -> Instância: " + str(instancia))
 
-    print("Status:", LpStatus[status])
+    print("Status:", status)
 
     try:
         print("\nValor da solução ótima: " +
-              str(round(value(modelo.m.objective))))
+              str(round(modelo.m.Objective().Value())))
     except:
         print("\nValor da solução ótima: - ")
 
     try:
-        print("Lower Bound: " + str(round(modelo.m.objective.LB)))
+        print("Lower Bound: " + str(round(modelo.m.Objective().BestBound())))
     except:
         print("Lower Bound: - ")
 
     try:
-        print("Nodes: " + str(round(modelo.m.getNumNodes())))
+        print("Nodes: " + str(round(modelo.m.nodes())))
     except:
         print("Nodes: - ")
 
@@ -68,46 +71,30 @@ def printSolucaoValoresSCIP(modelo, status, instancia, tempo):
 
 
 # Imprimindo a solução do problema no arquivo solucao.txt
-def printSolucaoSCIP(modelo, status, dados):
+def printSolucaoSCIP(modelo: modelo.ModeloSCIP, status, dados: dados.Dados):
     output = ""
 
-    if (LpStatus[status] == 'Infeasible'):
-        output += "Erro ao imprimir solucao"
-        print(output)
+    solfile = io.open("solucao_SCIP.txt", "w+")
 
-        solfile = io.open("solucao_SCIP.txt", "w+")
-        solfile.write(output)
-        return
+    for j in range(dados.n):
+        output += "x[" + str(j+1) + "]: "
+        output += str(modelo.x[j].solution_value())
+        output += "\n"
 
-    try:
-        solfile = io.open("solucao_SCIP.txt", "w+")
-
-        for j in range(dados.n):
-            output += "x[" + str(j+1) + "]: "
-            output += str(value(modelo.x[j]))
-            output += "\n"
-
-        solfile.write(output)
-
-    except:
-        output += "Erro ao imprimir solucao"
-        print(output)
-        solfile = io.open("solucao_SCIP.txt", "w+")
-        solfile.write(output)
-        print("\nErro ao imprimir solucao")
+    solfile.write(output)
 
     return
 
 
 # Função responsável por resolver o problema de otimização (utiliza a função objetivo, as restrições, as variáveis e os parâmetros criados)
-def resolverSCIP(modelo_SCIP, dados, minutos_totais, instancia):
-    solver = setParametrosSCIP(minutos_totais)
+def resolverSCIP(modelo_SCIP: modelo.ModeloSCIP, dados: dados.Dados, minutos_totais, instancia):
+    setParametrosSCIP(modelo_SCIP, minutos_totais)
     setVariaveisSCIP(modelo_SCIP, dados)
     setFuncaoObjetivoSCIP(modelo_SCIP, dados)
     setRestricoesSCIP(modelo_SCIP, dados)
 
     inicio_tempo = time.time()
-    status = modelo_SCIP.m.solve(solver)
+    status = modelo_SCIP.m.Solve()
     fim_tempo = time.time()
 
     printSolucaoValoresSCIP(modelo_SCIP, status, instancia,
