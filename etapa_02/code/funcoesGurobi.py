@@ -41,43 +41,53 @@ def setRestricoesGurobi(modelo: modelo.ModeloGurobi, dados: dados.Dados):
 
 # Imprimindo a solução ótima, o tempo de execução, os nós explorados e o lower bound
 def printSolucaoValoresGurobi(modelo: modelo.ModeloGurobi, instancia, tempo):
-    print("\n\nGUROBI -> Instância: " + str(instancia))
+    output = ""
+
+    solfile = io.open("resultados/"+str(instancia) + "/" +
+                      "output_gurobi.txt", "w+")
+
+    output += "GUROBI -> Instancia: " + str(instancia) + "\n"
 
     if (modelo.m.status == 3):
-        print("Solução Infactível")
+        output += "Solucao Infactivel" + "\n"
     else:
-        print("Existe solução")
+        output += "Existe solucao" + "\n"
 
     try:
-        print("\nValor da solução ótima: " + str(round(modelo.m.objVal)))
+        output += "\nValor da solucao otima: " + \
+            str(round(modelo.m.objVal)) + "\n"
     except:
-        print("\nValor da solução ótima: - ")
+        output += "\nValor da solucao otima: - " + "\n"
 
     try:
-        print("Lower Bound: " + str(round(modelo.m.objBound)))
+        output += "Lower Bound: " + str(round(modelo.m.objBound)) + "\n"
     except:
-        print("Lower Bound: - ")
+        output += "Lower Bound: - " + "\n"
 
     try:
-        print("Nodes: " + str(round(modelo.m.NodeCount)))
+        output += "Nodes: " + str(round(modelo.m.NodeCount)) + "\n"
     except:
-        print("Nodes: - ")
+        output += "Nodes: - " + "\n"
 
     try:
-        print("Tempo: " + str(round(tempo)) + " segundos" +
-              " = " + str(round(tempo)/60) + " minutos\n")
+        output += "Tempo: " + \
+            str(round(tempo)) + " segundos" + " = " + \
+            str(round(tempo)/60) + " minutos\n"
     except:
-        print("Tempo: - \n")
+        output += "Tempo: - \n"
+
+    solfile.write(output)
 
     return
 
 
 # Imprimindo a solução do problema no arquivo solucao.txt
-def printSolucaoGurobi(modelo: modelo.ModeloGurobi, dados: dados.Dados):
+def printSolucaoGurobi(modelo: modelo.ModeloGurobi, dados: dados.Dados, instancia):
     output = ""
 
     try:
-        solfile = io.open("solucao_gurobi.txt", "w+")
+        solfile = io.open("resultados/"+str(instancia) +
+                          "/" + "solucao_gurobi.txt", "w+")
 
         for j in range(dados.n):
             output += "x[" + str(j+1) + "]: "
@@ -89,7 +99,9 @@ def printSolucaoGurobi(modelo: modelo.ModeloGurobi, dados: dados.Dados):
     except:
         output = "Erro ao imprimir solucao"
         print(output)
-        solfile = io.open("solucao_gurobi.txt", "w+")
+        solfile = io.open("resultados/"+str(instancia) +
+                          "/" + "solucao_gurobi.txt", "w+")
+
         solfile.write(output)
 
     return
@@ -108,4 +120,4 @@ def resolverGurobi(modelo_GP: modelo.ModeloGurobi, dados: dados.Dados, minutos_t
 
     printSolucaoValoresGurobi(modelo_GP, instancia, fim_tempo-inicio_tempo)
 
-    printSolucaoGurobi(modelo_GP, dados)
+    printSolucaoGurobi(modelo_GP, dados, instancia)

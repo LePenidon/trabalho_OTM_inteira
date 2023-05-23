@@ -41,40 +41,50 @@ def setRestricoesSCIP(modelo: modelo.ModeloSCIP, dados: dados.Dados):
 
 # Imprimindo a solução ótima, o tempo de execução, os nós explorados e o lower bound
 def printSolucaoValoresSCIP(modelo: modelo.ModeloSCIP, status, instancia, tempo):
-    print("\n\nSCIP -> Instância: " + str(instancia))
+    output = ""
 
-    print("Status:", status)
+    solfile = io.open("resultados/"+str(instancia) + "/" +
+                      "output_SCIP.txt", "w+")
 
-    try:
-        print("\nValor da solução ótima: " +
-              str(round(modelo.m.Objective().Value())))
-    except:
-        print("\nValor da solução ótima: - ")
+    output += "SCIP -> Instancia: " + str(instancia) + "\n"
 
-    try:
-        print("Lower Bound: " + str(round(modelo.m.Objective().BestBound())))
-    except:
-        print("Lower Bound: - ")
+    output += "Status:" + str(status) + "\n"
 
     try:
-        print("Nodes: " + str(round(modelo.m.nodes())))
+        output += "\nValor da solucao otima: " + \
+            str(round(modelo.m.Objective().Value())) + "\n"
     except:
-        print("Nodes: - ")
+        output += "\nValor da solução ótima: - " + "\n"
 
     try:
-        print("Tempo: " + str(round(tempo)) + " segundos" +
-              " = " + str(round(tempo)/60) + " minutos\n")
+        output += "Lower Bound: " + \
+            str(round(modelo.m.Objective().BestBound())) + "\n"
     except:
-        print("Tempo: - \n")
+        output += "Lower Bound: - " + "\n"
+
+    try:
+        output += "Nodes: " + str(round(modelo.m.nodes())) + "\n"
+    except:
+        output += "Nodes: - " + "\n"
+
+    try:
+        output += "Tempo: " + \
+            str(round(tempo)) + " segundos" + " = " + \
+            str(round(tempo)/60) + " minutos\n"
+    except:
+        output += "Tempo: - \n"
+
+    solfile.write(output)
 
     return
 
 
 # Imprimindo a solução do problema no arquivo solucao.txt
-def printSolucaoSCIP(modelo: modelo.ModeloSCIP, status, dados: dados.Dados):
+def printSolucaoSCIP(modelo: modelo.ModeloSCIP, dados: dados.Dados, instancia):
     output = ""
 
-    solfile = io.open("solucao_SCIP.txt", "w+")
+    solfile = io.open("resultados/"+str(instancia) + "/" +
+                      "solucao_SCIP.txt", "w+")
 
     for j in range(dados.n):
         output += "x[" + str(j+1) + "]: "
@@ -100,4 +110,4 @@ def resolverSCIP(modelo_SCIP: modelo.ModeloSCIP, dados: dados.Dados, minutos_tot
     printSolucaoValoresSCIP(modelo_SCIP, status, instancia,
                             fim_tempo-inicio_tempo)
 
-    printSolucaoSCIP(modelo_SCIP, status, dados)
+    printSolucaoSCIP(modelo_SCIP, dados, instancia)

@@ -20,7 +20,7 @@ dados = Dados(instancia)
 # chamando a função resolverGurobi
 # ela utiliza os objetos modelo_GP, dados, o tempo máximo de execução do problema e a instância utilizada
 
-# resolverGurobi(modelo_GP, dados, minutos_totais, instancia)
+resolverGurobi(modelo_GP, dados, minutos_totais, instancia)
 
 # =======================================================================
 #                               SCIP

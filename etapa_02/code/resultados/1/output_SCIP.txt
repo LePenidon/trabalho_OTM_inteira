@@ -1,0 +1,7 @@
+SCIP -> Instancia: 1
+Status:1
+
+Valor da solucao otima: 67
+Lower Bound: 49
+Nodes: 0
+Tempo: 61 segundos = 1.0166666666666666 minutos
