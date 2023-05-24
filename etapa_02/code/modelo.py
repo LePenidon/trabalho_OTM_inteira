@@ -14,7 +14,7 @@ class ModeloGurobi():
 
 # definição da classe ModeloSCIP
 class ModeloSCIP():
-    m = pywraplp.Solver.CreateSolver('SAT')
+    m = pywraplp.Solver.CreateSolver('SCIP')
 
     # posteriormente este atributo será preenchido com as variáveis de decisão do problema
     x = 0

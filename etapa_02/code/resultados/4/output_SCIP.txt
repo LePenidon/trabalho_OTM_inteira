@@ -1,0 +1,8 @@
+SCIP -> Instancia: 4
+Status:1
+
+Valor da solucao otima: 60
+Limitante Dual: 47
+GAP: 21%
+Nos: 2327
+Tempo: 299 segundos = 5 minutos

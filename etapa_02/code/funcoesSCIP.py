@@ -57,20 +57,29 @@ def printSolucaoValoresSCIP(modelo: modelo.ModeloSCIP, status, instancia, tempo)
         output += "\nValor da solução ótima: - " + "\n"
 
     try:
-        output += "Lower Bound: " + \
+        output += "Limitante Dual: " + \
             str(round(modelo.m.Objective().BestBound())) + "\n"
     except:
-        output += "Lower Bound: - " + "\n"
+        output += "Limitante Dual: - " + "\n"
 
     try:
-        output += "Nodes: " + str(round(modelo.m.nodes())) + "\n"
+        dual = modelo.m.Objective().BestBound()
+        sol = modelo.m.Objective().Value()
+        GAP = (sol-dual)/sol*100
+
+        output += "GAP: " + str(round(GAP)) + "%\n"
     except:
-        output += "Nodes: - " + "\n"
+        output += "GAP: - " + "\n"
+
+    try:
+        output += "Nos: " + str(round(modelo.m.nodes())) + "\n"
+    except:
+        output += "Nos: - " + "\n"
 
     try:
         output += "Tempo: " + \
             str(round(tempo)) + " segundos" + " = " + \
-            str(round(tempo)/60) + " minutos\n"
+            str(round(tempo/60)) + " minutos\n"
     except:
         output += "Tempo: - \n"
 

@@ -1,7 +1,8 @@
-GUROBI -> Instância: 1
-Existe solução
+GUROBI -> Instancia: 1
+Existe solucao
 
-Valor da solução ótima: 66
-Lower Bound: 51
-Nodes: 5057
-Tempo: 60 segundos = 1.0 minutos
+Valor da solucao otima: 65
+Limitante Dual: 53
+GAP: 18%
+Nos: 40483
+Tempo: 300 segundos = 5 minutos

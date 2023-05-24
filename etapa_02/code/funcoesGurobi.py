@@ -60,19 +60,26 @@ def printSolucaoValoresGurobi(modelo: modelo.ModeloGurobi, instancia, tempo):
         output += "\nValor da solucao otima: - " + "\n"
 
     try:
-        output += "Lower Bound: " + str(round(modelo.m.objBound)) + "\n"
+        output += "Limitante Dual: " + str(round(modelo.m.objBound)) + "\n"
     except:
-        output += "Lower Bound: - " + "\n"
-
+        output += "Limitante Dual: - " + "\n"
     try:
-        output += "Nodes: " + str(round(modelo.m.NodeCount)) + "\n"
+        dual = modelo.m.objBound
+        sol = modelo.m.objVal
+        GAP = (sol-dual)/sol*100
+
+        output += "GAP: " + str(round(GAP)) + "%\n"
     except:
-        output += "Nodes: - " + "\n"
+        output += "GAP: - " + "\n"
+    try:
+        output += "Nos: " + str(round(modelo.m.NodeCount)) + "\n"
+    except:
+        output += "Nos: - " + "\n"
 
     try:
         output += "Tempo: " + \
             str(round(tempo)) + " segundos" + " = " + \
-            str(round(tempo)/60) + " minutos\n"
+            str(round(tempo/60)) + " minutos\n"
     except:
         output += "Tempo: - \n"
 
