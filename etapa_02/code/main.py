@@ -28,4 +28,4 @@ resolverGurobi(modelo_GP, dados, minutos_totais, instancia)
 # chamando a função resolverSCIP
 # ela utiliza os objetos modelo_SCIP, dados, o tempo máximo de execução do problema e a instância utilizada
 
-resolverSCIP(modelo_SCIP, dados, minutos_totais, instancia)
+# resolverSCIP(modelo_SCIP, dados, minutos_totais, instancia)

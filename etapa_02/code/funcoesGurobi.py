@@ -15,6 +15,16 @@ def setParametrosGurobi(modelo: modelo.ModeloGurobi, minutos):
     modelo.m.setParam("TimeLimit", minutos*60)
     modelo.m.setParam('OutputFlag', 0)
 
+    modelo.m.setParam('Presolve', 0)
+
+    # modelo.m.setParam("Sifting", 2)
+    # modelo.m.setParam("Disconnected", 2)
+    # modelo.m.setParam("CoverCuts", 2)
+
+    # https://www.gurobi.com/documentation/9.5/refman/sifting.html#parameter:Sifting
+    # https://www.gurobi.com/documentation/9.5/refman/disconnected.html#parameter:Disconnected
+    # https://www.gurobi.com/documentation/9.5/refman/covercuts.html#parameter:CoverCuts
+
     modelo.m.update()
     return
 
