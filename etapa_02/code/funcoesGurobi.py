@@ -19,7 +19,6 @@ def setParametrosGurobi(modelo: modelo.ModeloGurobi, minutos):
 
     # modelo.m.setParam("Sifting", 2)
     # modelo.m.setParam("Disconnected", 2)
-    # modelo.m.setParam("CoverCuts", 2)
 
     # https://www.gurobi.com/documentation/9.5/refman/sifting.html#parameter:Sifting
     # https://www.gurobi.com/documentation/9.5/refman/disconnected.html#parameter:Disconnected
