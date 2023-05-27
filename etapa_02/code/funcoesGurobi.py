@@ -16,13 +16,12 @@ def setParametrosGurobi(modelo: modelo.ModeloGurobi, minutos):
     modelo.m.setParam('OutputFlag', 0)
 
     modelo.m.setParam('Presolve', 0)
+    modelo.m.setParam("VarBranch", 1)
 
-    # modelo.m.setParam("Sifting", 2)
-    modelo.m.setParam("Disconnected", 2)
+    # modelo.m.setParam("BranchDir", 2)
 
-    # https://www.gurobi.com/documentation/9.5/refman/sifting.html#parameter:Sifting
-    # https://www.gurobi.com/documentation/9.5/refman/disconnected.html#parameter:Disconnected
-    # https://www.gurobi.com/documentation/9.5/refman/covercuts.html#parameter:CoverCuts
+    # https://www.gurobi.com/documentation/9.5/refman/branchdir.html#parameter:BranchDir
+    # https://www.gurobi.com/documentation/9.5/refman/varbranch.html#parameter:VarBranch
 
     modelo.m.update()
     return

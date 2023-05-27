@@ -1,7 +1,7 @@
 GUROBI -> Instancia: 2
 Existe solucao
 
-Valor da solucao otima: 67
+Valor da solucao otima: 69
 Limitante Dual: 17
 GAP: 75%
 Nos: 1
