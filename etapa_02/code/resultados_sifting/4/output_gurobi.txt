@@ -1,8 +1,8 @@
-GUROBI -> Instancia: 2
+GUROBI -> Instancia: 4
 Existe solucao
 
-Valor da solucao otima: 67
+Valor da solucao otima: 61
 Limitante Dual: 17
-GAP: 75%
+GAP: 72%
 Nos: 1
 Tempo: 300 segundos = 5 minutos

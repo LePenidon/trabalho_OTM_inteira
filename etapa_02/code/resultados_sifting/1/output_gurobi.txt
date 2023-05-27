@@ -1,4 +1,4 @@
-GUROBI -> Instancia: 2
+GUROBI -> Instancia: 1
 Existe solucao
 
 Valor da solucao otima: 67
