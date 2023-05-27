@@ -5,4 +5,4 @@ Valor da solucao otima: 61
 Limitante Dual: 17
 GAP: 72%
 Nos: 1
-Tempo: 300 segundos = 5 minutos
+Tempo: 301 segundos = 5 minutos

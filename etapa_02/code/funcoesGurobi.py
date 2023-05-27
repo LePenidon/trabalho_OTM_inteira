@@ -16,7 +16,7 @@ def setParametrosGurobi(modelo: modelo.ModeloGurobi, minutos):
     modelo.m.setParam('OutputFlag', 0)
 
     modelo.m.setParam('Presolve', 0)
-    modelo.m.setParam("VarBranch", 1)
+    modelo.m.setParam("VarBranch", 3)
 
     # modelo.m.setParam("BranchDir", 2)
 
