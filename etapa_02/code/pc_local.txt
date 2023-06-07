@@ -1,0 +1,28 @@
+Python: 3.11.3
+
+
+Gurobi: 10.0.1
+
+
+
+PC: 
+Host Name:                 PENIDONOT
+OS Name:                   Microsoft Windows 11 Home Single Language
+OS Version:                10.0.22621 N/A Build 22621
+OS Manufacturer:           Microsoft Corporation
+OS Configuration:          Standalone Workstation
+OS Build Type:             Multiprocessor Free
+Registered Owner:          penido
+Registered Organization:
+Product ID:                00342-41387-95778-AAOEM
+                           [02]: Qualcomm QCA61x4A 802.11ac Wireless Adapter
+                                 Connection Name: Wi-Fi
+                                 DHCP Enabled:    Yes
+                                 DHCP Server:     1.1.1.1
+                                 IP address(es)
+                                 [01]: 172.26.202.167
+                                 [02]: fe80::b035:8245:7451:a183
+                           [03]: Cisco AnyConnect Secure Mobility Client Virtual Miniport Adapter for Windows x64
+                                 Connection Name: Ethernet 2
+                                 Status:          Hardware not present
+Hyper-V Requirements:      A hypervisor has been detected. Features required for Hyper-V will not be displayed.
