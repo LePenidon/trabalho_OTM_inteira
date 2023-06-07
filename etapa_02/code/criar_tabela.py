@@ -3,40 +3,32 @@ import os
 import itertools
 
 
-# Define as opções de valores
-valores_tipo = ['i', 'd', 't']
-valores_qtd = [3, 8, 10]
+pastas = ["default", "sem_presolve", "VarB_0", "VarB_1", "VarB_2", "VarB_3"]
+# pastas = ["default"]
 
+for pasta_atual in pastas:
 
-# Geraa todas as combinações possíveis
-combinacoes = itertools.product(valores_qtd, valores_tipo)
-
-# Imprime todas as combinações
-# for combinacao in combinacoes:
-# print(combinacao)
-
-for i in combinacoes:
-    qtd_particoes = i[0]
-    tipo_particao = i[1]
-
-    pasta_resultados = "resultados_{}_{}".format(qtd_particoes, tipo_particao)
-    # pasta_resultados = "resultados"
+    # Define o caminho da pasta de resultados
+    pasta_resultados = "resultados_{}".format(pasta_atual)
 
     # Criação do dicionário
     dicionario = {}
 
     # Preenchimento do dicionário com valores nulos
-    for chave in range(1, 25):
+    for chave in range(1, 6):
         valor = {
             "funcao_objetivo": None,
+            "limitante_dual": None,
+            "gap": None,
+            "nos": None,
             "tempo": None
         }
         dicionario[chave] = valor
 
     # Percorre as subpastas de 1 a 24
-    for i in range(1, 25):
+    for i in range(1, 6):
         subpasta = os.path.join(pasta_resultados, str(i))
-        arquivo = os.path.join(subpasta, "output_{}.txt".format(i))
+        arquivo = os.path.join(subpasta, "output_gurobi.txt")
 
         # Verifica se o arquivo existe
         if os.path.exists(arquivo):
@@ -47,8 +39,19 @@ for i in combinacoes:
                 for linha in linhas:
                     if "Valor da solucao otima:" in linha:
                         valor_otimo = int(linha.split(":")[1].strip())
-
                         dicionario[i]["funcao_objetivo"] = valor_otimo
+
+                    elif "Limitante Dual:" in linha:
+                        limitante_dual = linha.split(":")[1].strip()
+                        dicionario[i]["limitante_dual"] = limitante_dual
+
+                    elif "GAP:" in linha:
+                        gap = linha.split(":")[1].strip()
+                        dicionario[i]["gap"] = gap
+
+                    elif "Nos:" in linha:
+                        nos = linha.split(":")[1].strip()
+                        dicionario[i]["nos"] = nos
 
                     elif "Tempo:" in linha:
                         tempo_str = linha.split(":")[1].strip()
@@ -60,11 +63,12 @@ for i in combinacoes:
                         dicionario[i]["tempo"] = tempo_min
 
     instancia = f"Instância"
-    label = [instancia, 'Valor FO', 'Tempo (min)']
+    label = [instancia, 'Valor FO', 'Limitante Dual',
+             'GAP', 'Nós', 'Tempo (min)']
 
     dados = []
 
-    dados = [[i, dicionario[i]["funcao_objetivo"], dicionario[i]["tempo"]] if dicionario[i]["funcao_objetivo"]
+    dados = [[i, dicionario[i]["funcao_objetivo"], dicionario[i]["limitante_dual"], dicionario[i]["gap"], dicionario[i]["nos"], dicionario[i]["tempo"]] if dicionario[i]["funcao_objetivo"]
              is not None and dicionario[i]["tempo"] is not None else [i, "-", "-"] for i in dicionario]
 
     # Cria a figura e o eixo da tabela
@@ -74,24 +78,25 @@ for i in combinacoes:
     table = ax.table(cellText=dados, loc='center', colLabels=label)
 
     # Define o estilo da tabela
-    table.set_fontsize(8)
-    table.scale(1, 1)
+    table.set_fontsize(10)
+    table.scale(1, 3)
+    fig.set_size_inches(10, 4)
 
     # Define a variável de controle
     alternar_cor = False
 
     # Altera a cor de fundo das células para cinza claro
-    for i in range(len(dados)+1):
-        for j in range(len(label)):
-            if i == 0:
-                cell = table.get_celld()[i, j]
+    for i_table in range(len(dados)+1):
+        for j_table in range(len(label)):
+            if i_table == 0:
+                cell = table.get_celld()[i_table, j_table]
                 cell.set_text_props(fontweight='bold')
                 cell.set_facecolor('#ffffcc')
                 cell.set_text_props(ha='center')
 
                 continue
 
-            cell = table[i, j]
+            cell = table[i_table, j_table]
             if alternar_cor:
                 cell.set_facecolor('#d6d6d6')
                 cell.set_text_props(ha='center')
@@ -102,15 +107,15 @@ for i in combinacoes:
         alternar_cor = not alternar_cor
 
     # Define o título da tabela
-    titulo = "Partições: {} - {}".format(qtd_particoes, tipo_particao)
+    titulo = "Gurobi: {}".format(pasta_atual)
     titulo_obj = ax.set_title(titulo, fontsize=14, fontweight='bold', pad=20)
 
     # Define a posição do título
-    titulo_obj.set_position([.5, 1.05])
+    titulo_obj.set_position([.5, .1])
 
     # Remove as bordas da tabela
     ax.axis('off')
 
     # Salva a tabela como uma imagem PNG
-    nome_arquivo = "tabela_{}_{}.png".format(qtd_particoes, tipo_particao)
+    nome_arquivo = "tabela_gurobi_{}.png".format(pasta_atual)
     plt.savefig(nome_arquivo)
