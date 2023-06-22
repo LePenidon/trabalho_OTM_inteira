@@ -3,7 +3,7 @@ Python: 3.11.3
 
 Gurobi: 10.0.1
 
-
+Ortools (SCIP): 9.6.2534
 
 PC: 
 Host Name:                 PENIDONOT
