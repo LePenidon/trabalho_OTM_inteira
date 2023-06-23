@@ -74,6 +74,6 @@ class Dados():
 
         for i in valores:
             for coluna in i:
-                self.a[linha_matriz][coluna-1] = custos[coluna-1]
+                self.a[linha_matriz][coluna-1] = 1
 
             linha_matriz += 1
